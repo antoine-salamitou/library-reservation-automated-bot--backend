@@ -6,3 +6,4 @@ had to shut it down after request from Affluences Team.
 
 #Tech
 AWS (Lambda functions, step functions, dynamodb, rds) + Python + Serverless
+Use psycopg2 folder when on AWS servers and import psycopg2 module when local use
