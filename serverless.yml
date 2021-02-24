@@ -1,0 +1,351 @@
+service: aws
+
+plugins:
+  - serverless-python-requirements
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: eu-west-3
+  timeout: 60
+
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - ec2:*
+      Resource: "*"
+
+
+stepFunctions:
+  stateMachines:
+    requestsAfterTomorrowBSB:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsAfterTomorrowBSB
+      definition:
+        Comment: "Step function reservations after Tomorrow"
+        StartAt: fetchResrequestsAfterTomorrowBSB
+        States:
+          fetchResrequestsAfterTomorrowBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsAfterTomorrowBSB"
+            Next: reserverequestsAfterTomorrowBSB
+          reserverequestsAfterTomorrowBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsAfterTomorrowBSB"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+
+    requestsTomorrowBSB:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsTomorrowBSB
+      definition:
+        Comment: "Step function reservations Tomorrow"
+        StartAt: fetchResrequestsTomorrowBSB
+        States:
+          fetchResrequestsTomorrowBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsTomorrowBSB"
+            Next: reserverequestsTomorrowBSB
+          reserverequestsTomorrowBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsTomorrowBSB"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+    requestsTodayBSB:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsTodayBSB
+      definition:
+        Comment: "Step function reservations today"
+        StartAt: fetchResrequestsTodayBSB
+        States:
+          fetchResrequestsTodayBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsTodayBSB"
+            Next: reserverequestsTodayBSB
+          reserverequestsTodayBSB:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsTodayBSB"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+
+    requestsAfterTomorrowBSG:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsAfterTomorrowBSG
+      definition:
+        Comment: "Step function reservations after Tomorrow"
+        StartAt: fetchResrequestsAfterTomorrowBSG
+        States:
+          fetchResrequestsAfterTomorrowBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsAfterTomorrowBSG"
+            Next: reserverequestsAfterTomorrowBSG
+          reserverequestsAfterTomorrowBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsAfterTomorrowBSG"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+  
+    requestsTomorrowBSG:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsTomorrowBSG
+      definition:
+        Comment: "Step function reservations Tomorrow"
+        StartAt: fetchResrequestsTomorrowBSG
+        States:
+          fetchResrequestsTomorrowBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsTomorrowBSG"
+            Next: reserverequestsTomorrowBSG
+          reserverequestsTomorrowBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsTomorrowBSG"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+    requestsTodayBSG:
+      events:
+      - schedule:
+          rate: cron(01,05,10,15,20,25,31,35,40,45,50,55 7-23 * * ? *)
+      name: requestsTodayBSG
+      definition:
+        Comment: "Step function reservations today"
+        StartAt: fetchResrequestsTodayBSG
+        States:
+          fetchResrequestsTodayBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-fetchResrequestsTodayBSG"
+            Next: reserverequestsTodayBSG
+          reserverequestsTodayBSG:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-reserverequestsTodayBSG"
+            Next: validateRequests
+          validateRequests:
+            Type: Task
+            Resource: "arn:aws:lambda:eu-west-3:949329436455:function:aws-dev-validateRequests"
+            End: true
+
+functions:
+  user_email_sent:
+    handler: handler.user_email_sent
+    events:
+      - http: 
+          path: bsb/{email}/{bibli}
+          method: get
+          cors:
+            origin: '*'
+
+  fetchResrequestsTomorrowBSB:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSB'
+      day: 1
+      resource_id: '702'
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsTomorrowBSB:
+    handler: handler.reserveRequests
+    environment:
+      day: 1
+      etablissement: 'BSB'
+      resource_id: '702'
+
+  fetchResrequestsAfterTomorrowBSB:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSB'
+      day: 2
+      resource_id: '702'
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsAfterTomorrowBSB:
+    handler: handler.reserveRequests
+    environment:
+      day: 2
+      etablissement: 'BSB'
+      resource_id: '702'
+
+  fetchResrequestsTodayBSB:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSB'
+      day: 0
+      resource_id: '702'
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsTodayBSB:
+    handler: handler.reserveRequests
+    environment:
+      day: 0
+      etablissement: 'BSB'
+      resource_id: '702'
+  
+  fetchResrequestsTomorrowBSG:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSG'
+      resource_id: '1468'
+      
+      day: 1
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsTomorrowBSG:
+    handler: handler.reserveRequests
+    environment:
+      day: 1
+      etablissement: 'BSG'
+      resource_id: '1468'
+
+  fetchResrequestsAfterTomorrowBSG:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSG'
+      resource_id: '1468'
+      day: 2
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsAfterTomorrowBSG:
+    handler: handler.reserveRequests
+    environment:
+      day: 2
+      etablissement: 'BSG'
+      resource_id: '1468'
+
+  fetchResrequestsTodayBSG:
+    handler: handler.fetchResRequests
+    environment:
+      etablissement: 'BSG'
+      day: 0
+      resource_id: '1468'
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  reserverequestsTodayBSG:
+    handler: handler.reserveRequests
+    environment:
+      day: 0
+      etablissement: 'BSG'
+      resource_id: '1468'
+  validateRequests:
+    handler: handler.validateRequests
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+
+  create_reservation_request:
+    handler: handler.create_reservation_request
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+    events:
+      - http:
+          path: bsb/create_reservation_request
+          method: post
+          cors:
+            origin: '*'
+          
+  send_reservation_request:
+    handler: handler.send_reservation_request
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+    events:
+      - http:
+          path: bsb/send_reservation_request/{email}
+          method: get
+          cors:
+            origin: '*'
+
+  reservation_request_annulation:
+    handler: handler.reservation_request_annulation
+    vpc:
+      securityGroupIds:
+      - sg-502b0030
+      subnetIds:
+      - subnet-adb695d6
+      - subnet-958c84fc
+    events:
+      - http:
+          path: bsb/reservation_request_annulation
+          method: post
+          cors:
+            origin: '*'
+
+  delay_real_reservation:
+    handler: handler.delay_real_reservation
+    events:
+      - http:
+          path: bsb/delay_real_reservation
+          method: post
+          cors:
+            origin: '*'

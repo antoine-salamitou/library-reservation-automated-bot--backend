@@ -1,0 +1,5 @@
+DateTime==4.3
+requests==2.24.0
+boto3
+intervaltree
+requests_futures
